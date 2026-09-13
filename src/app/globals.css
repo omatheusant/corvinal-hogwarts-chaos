@@ -1,26 +1,257 @@
 @import "tailwindcss";
 
+/* ==========================================================================
+   Corvinal — A Torre do Conhecimento
+   Tokens de identidade visual da casa. A paleta é intencional e fixa — não
+   um tema claro/escuro alternável, mas a identidade da própria "torre":
+   azul-noturno profundo, bronze envelhecido, marfim e pergaminho.
+   ========================================================================== */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
+
+  /* Paleta base */
+  --ink: #080f1c; /* azul quase preto — fundo principal */
+  --navy: #142742; /* azul profundo — superfícies elevadas */
+  --slate: #344b67; /* azul ardósia — bordas, superfícies secundárias */
+  --bronze: #b08a57; /* bronze envelhecido — ornamentos e destaques */
+  --bronze-soft: #c9a877; /* bronze mais claro — hover, brilho de vela */
+  --ivory: #e9e2d5; /* marfim — texto principal sobre fundo escuro */
+  --parchment: #d7c9ad; /* pergaminho — texto secundário, painéis claros */
+
+  /* Papéis semânticos */
+  --background: var(--ink);
+  --surface: var(--navy);
+  --surface-raised: #1a3050;
+  --border: #b08a5733; /* bronze a ~20% */
+  --border-strong: #b08a5766;
+
+  --foreground: var(--ivory);
+  --muted: #b9c2cf;
+  --muted-foreground: #8b96a8;
+
+  --accent: var(--bronze);
+  --accent-strong: var(--bronze-soft);
+
+  /* Painel "pergaminho" — usado com moderação para citações e destaques */
+  --panel-parchment-bg: var(--parchment);
+  --panel-parchment-fg: var(--ink);
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 1rem;
+
+  --shadow-soft: 0 8px 32px -12px rgb(0 0 0 / 0.55);
+  --shadow-elevated: 0 24px 64px -20px rgb(0 0 0 / 0.7);
+
+  --font-display: var(--font-cormorant), "Cormorant Garamond", ui-serif, serif;
+  --font-serif: var(--font-source-serif), "Source Serif 4", ui-serif, serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-ink: var(--ink);
+  --color-navy: var(--navy);
+  --color-slate: var(--slate);
+  --color-bronze: var(--bronze);
+  --color-bronze-soft: var(--bronze-soft);
+  --color-ivory: var(--ivory);
+  --color-parchment: var(--parchment);
+
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+
+  --color-panel-parchment-bg: var(--panel-parchment-bg);
+  --color-panel-parchment-fg: var(--panel-parchment-fg);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+
+  --shadow-soft: var(--shadow-soft);
+  --shadow-elevated: var(--shadow-elevated);
+
+  --font-display: var(--font-display);
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+
+  --container-content: 72rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-serif);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+::selection {
+  background: var(--bronze);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--bronze-soft);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+::-webkit-scrollbar-track {
+  background: var(--ink);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--slate);
+  border-radius: 999px;
+  border: 2px solid var(--ink);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bronze);
+}
+
+@layer utilities {
+  .container-page {
+    width: 100%;
+    max-width: var(--container-content);
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 640px) {
+    .container-page {
+      padding-inline: 2rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .container-page {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Rótulo pequeno em versalete usado como identificação editorial
+     ("Hogwarts · Casa Corvinal", categorias do mural, etc.) */
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent-strong);
+  }
+
+  /* Textura sutil de pergaminho/pedra sobre superfícies escuras */
+  .bg-grain {
+    position: relative;
+    isolation: isolate;
+  }
+  .bg-grain::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    background-size: 180px 180px;
+    z-index: 0;
+  }
+
+  /* Painel de moldura ogival — usa a clipPath global definida em ArchDefs */
+  .arch-frame {
+    clip-path: url(#corvinal-arch);
+  }
+
+  .card-parchment {
+    background: var(--panel-parchment-bg);
+    color: var(--panel-parchment-fg);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .animate-fade-up {
+    animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .animate-fade-in {
+    animation: fade-in 0.9s ease-out both;
+  }
+  .animate-twinkle {
+    animation: twinkle 4s ease-in-out infinite;
+  }
 }

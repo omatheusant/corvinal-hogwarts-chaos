@@ -1,0 +1,58 @@
+import type { Post } from "@/types/domain";
+
+/** Conteúdo de DEMONSTRAÇÃO — ver nota em `students.ts`. */
+export const DEMO_POSTS: Post[] = [
+  {
+    id: "demo-post-1",
+    slug: "vigilia-de-outono-na-torre",
+    category: "evento",
+    title: "Vigília de Outono na Torre (exemplo)",
+    excerpt: "Uma noite de observação do céu no topo da Torre da Corvinal, aberta a toda a casa.",
+    body:
+      "Na próxima lua cheia, a Torre estará aberta para uma vigília de observação astronômica. Tragam seus próprios instrumentos, ou usem os disponíveis na sala comum.\n\n> \"O céu de outono recompensa quem tem paciência para esperá-lo escurecer por completo.\"",
+    coverUrl: null,
+    authorLabel: "Conselho da Corvinal",
+    eventDate: "2026-10-24",
+    publishedAt: "2026-09-02T10:00:00.000Z",
+    highlightOrder: 1,
+  },
+  {
+    id: "demo-post-2",
+    slug: "novo-catalogo-da-biblioteca",
+    category: "aviso",
+    title: "Novo catálogo da biblioteca da casa (exemplo)",
+    excerpt: "A sala comunal recebeu uma nova estante com registros de expedições anteriores.",
+    body: "A estante ao lado da lareira foi reorganizada e agora inclui um catálogo com anotações de expedições de alunos de anos anteriores. Consulte a monitoria para empréstimos.",
+    coverUrl: null,
+    authorLabel: "Monitoria da Corvinal",
+    eventDate: null,
+    publishedAt: "2026-08-20T09:00:00.000Z",
+    highlightOrder: 2,
+  },
+  {
+    id: "demo-post-3",
+    slug: "taca-das-casas-observacao-celeste",
+    category: "conquista",
+    title: "Reconhecimento no desafio de Astronomia (exemplo)",
+    excerpt: "A casa recebeu menção honrosa pela precisão de suas cartas celestes.",
+    body: "As cartas celestes produzidas pela casa neste trimestre foram citadas como referência pelo professor responsável. Um reconhecimento coletivo, fruto de várias noites de observação.",
+    coverUrl: null,
+    authorLabel: "Conselho da Corvinal",
+    eventDate: null,
+    publishedAt: "2026-07-30T09:00:00.000Z",
+    highlightOrder: 3,
+  },
+  {
+    id: "demo-post-4",
+    slug: "cronica-a-primeira-neblina",
+    category: "cronica",
+    title: "A primeira neblina (exemplo)",
+    excerpt: "Um registro narrativo de uma manhã incomum sobre o lago.",
+    body: "A neblina chegou antes do esperado naquele ano, cobrindo o lago por completo antes do café da manhã. Da janela mais alta da Torre, era possível ver apenas as pontas dos mastros dos barcos — e, por um instante, ninguém soube dizer se aquilo era clima ou magia.",
+    coverUrl: null,
+    authorLabel: "Registro editorial da casa",
+    eventDate: null,
+    publishedAt: "2026-06-14T09:00:00.000Z",
+    highlightOrder: null,
+  },
+];
