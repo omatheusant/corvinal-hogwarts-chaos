@@ -79,6 +79,16 @@ export function MusicPlayer() {
   const prefs = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const [isPlaying, setIsPlaying] = useState(false);
   const [unavailable, setUnavailable] = useState(false);
+  // Trava a tentativa de autoplay para acontecer uma única vez de verdade.
+  // O Strict Mode do React (dev) roda todo efeito de montagem duas vezes de
+  // propósito para expor efeitos colaterais mal escritos — sem essa trava,
+  // isso dispara `.play()` duas vezes em sequência no mesmo elemento antes
+  // da primeira tentativa terminar de carregar, e o Chrome trava a máquina
+  // de estado do <audio> permanentemente (fica em "carregando" para sempre,
+  // sem nunca disparar erro). Um `ref` sobrevive ao remount sintético do
+  // Strict Mode porque é a mesma instância de componente, então serve como
+  // guarda mesmo com o efeito rodando duas vezes.
+  const autoplayAttempted = useRef(false);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -95,12 +105,19 @@ export function MusicPlayer() {
   // o som no primeiro gesto do usuário na página.
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio || autoplayAttempted.current) return;
+    autoplayAttempted.current = true;
 
     const savedMuted = getSnapshot().muted;
     let gestureUnmute: (() => void) | undefined;
 
     audio.play().catch(() => {
+      // `load()` reseta o estado de rede/prontidão do elemento antes da
+      // segunda tentativa. Sem isso, reusar o mesmo elemento logo após uma
+      // promessa de play() rejeitada deixa o Chrome preso em "carregando"
+      // para sempre (nunca dispara erro nem chega a tocar) — descoberto
+      // testando ao vivo, não é só teoria.
+      audio.load();
       audio.muted = true;
       audio.play().catch(() => setUnavailable(true));
 
@@ -126,6 +143,10 @@ export function MusicPlayer() {
       audio.pause();
       return;
     }
+    // Se nada carregou ainda (readyState 0), pode ser sobra de uma
+    // tentativa de autoplay que falhou — reseta antes de tentar de novo
+    // pelo mesmo motivo do efeito de autoplay acima (ver comentário lá).
+    if (audio.readyState === 0) audio.load();
     audio.play().catch(() => setUnavailable(true));
   }, [isPlaying]);
 
